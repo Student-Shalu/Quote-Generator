@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Generator</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: rgb(4, 58, 144);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            width: 25%;
+        }
+
+        .all-btns .copy-btn span {
+            display: none;
+            position: absolute;
+            font-size: 8px;
+        }
+        .container h1{
+            color: rgb(32, 183, 243);
+            text-align: center;
+            padding: 10px;
+        }
+        .author{
+            text-align: justify;
+            margin-top: 20px;
+        }
+        .author span{
+            border-top: 2px solid rgb(32, 183, 243);
+            
+        }
+        .bxs-quote-alt-left{
+            color: rgb(32, 183, 243);
+            font-size: 2rem;
+        }
+        .all-btns{
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+
+        }
+        .all-btns li{
+            list-style: none;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: rgb(4, 58, 144);
+            color: white;
+            margin: 10px;
+            cursor: pointer;
+        }
+        .all-btns a{
+            color: white;
+            /* background-color: black; */
+        }
+        .all-btns .twitt-btn{
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Quote Generator</h1>
+        <i class='bx bxs-quote-alt-left'></i>
+        <div class="quote-box">
+            <h3 class="quote"></h3>
+        </div>
+        <div class="author">
+            <span></span>
+        </div>
+        <ul class="all-btns">
+            <li class="speak-btn"><i class='bx bx-volume-full'></i></li>
+            <li class="getquote-btn"><i class='bx bx-refresh'></i></li>
+            <li class="copy-btn"><i class='bx bxs-copy'></i><span>Copied!</span></li>
+            <li class="twitt-btn"><a href="https://twitter.com/ShaluKumar78336"><i class='bx bxl-twitter'></i></a></li>
+        </ul>
+    </div>
+    <script>
+        let quote = document.querySelector(".quote");
+        let author = document.querySelector(".author span");
+        let refreshBtn = document.querySelector(".getquote-btn");
+        let copyBtn = document.querySelector(".copy-btn");
+        let speakBtn = document.querySelector(".speak-btn");
+        let twittBtn = document.querySelector(".twitt-btn");
+        let copyText = document.querySelector(".copy-btn span");
+        let copyIcon = document.querySelector(".copy-btn i");
+
+        const url = "https://api.quotable.io/random";
+
+        let getQuote = () => {
+            quote.innerHTML = "Abaraca Dabara";
+            author.innerHTML = "Loading...";
+            fetch(url)
+                .then((res) => res.json())
+                .then((data) => {
+                    quote.innerHTML = data.content;
+                    author.innerHTML = '-' + data.author;
+                })
+        }
+
+        let copyQuote = () => {
+            navigator.clipboard.writeText(quote.textContent);
+            copyIcon.style.display = 'none';
+            copyText.style.display = 'block'; 
+            setTimeout(() => {
+                copyIcon.style.display = "block";
+                copyText.style.display = 'none';
+            })
+        }
+
+        let speakQuote = () => {
+            let speech = new SpeechSynthesisUtterance();
+            speech.text = `${quote.textContent} by ${author.textContent}`;
+            speechSynthesis.speak(speech);
+        }
+
+        let twittQuote = () => {
+            let tweetUrl = `https://twitter.com/intent/tweet?url=${quote.innerHTML} ${author.innerHTML}`; 
+        }
+
+        getQuote();
+        refreshBtn.addEventListener('click', getQuote);
+        copyBtn.addEventListener('click', copyQuote);
+        speakBtn.addEventListener('click', speakQuote);
+        twittBtn.addEventListener('click', twittQuote);
+
+    </script>
+</body>
+
+</html>
